@@ -299,7 +299,7 @@ footer li {
 footer a {
   padding: 8px;
   text-decoration: none;
-  color:#333333;
+  color:black;
 }
 
 
@@ -310,4 +310,29 @@ footer p {
 
 footer .address {
   margin-top:20px;
+}
+
+.booking {
+  margin-top:100px;
+  margin-bottom:50px;
+  margin-left:50px;
+  margin-right:50px;
+}
+
+input, select {
+  width: 100%;
+  padding: 12px 20px;
+  margin: 8px 0;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.booking h2 {
+  color:#333333;
+}
+
+.booking {
+  flex-wrap: wrap;
 }
