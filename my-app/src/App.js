@@ -5,12 +5,17 @@ import Main from './Main.js';
 import Footer from './Footer.js';
 import BookingMain from './BookingMain.js';
 import ViewBooking from './ViewBooking.js';
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import {  Routes, Route } from "react-router-dom";
 import { useState } from 'react';
 import { useReducer } from 'react';
+import  fakeAPI  from './FakeAPI.js';
+import ConfirmBooking from './ConfirmBooking.js';
+import { useNavigate } from "react-router-dom";
+
 
 function App() {
   const [availableTimes, setAvailableTimes] = useReducer(updateTimes, [], initializeTimes);
+  const navigate = useNavigate();
 
   function updateTimes(state, action)
   {
@@ -18,14 +23,7 @@ function App() {
   }
 
   function initializeTimes(times){
-      return  [
-        "17:00",
-        "18:00",
-        "19:00",
-        "20:00",
-        "21:00",
-        "22:00",
-      ];
+      return fakeAPI.fetchAPI((new Date()))
   }
 
   const [form, setForm] = useState({
@@ -44,9 +42,16 @@ function App() {
       [name]: value    });
     }
 
-    const handleSubmit = function(event) {
-      
+
+    const HandleSubmit = function(event) {
+      event.preventDefault();
+      const result = fakeAPI.submitAPI(new FormData(document.querySelector('form')));
+      if(result){
+        return navigate("/booking_confirm")    
+      }
     }
+    
+
   const HomePage = () => {
     return  (   
       <>
@@ -58,13 +63,24 @@ function App() {
     );
   };
 
+  const BookingConfirmationPage = () => {
+    return (
+      <>
+      <Header></Header>
+      <Nav></Nav>
+      <ConfirmBooking></ConfirmBooking>
+      <Footer></Footer>
+      </>
+    )
+  }
+
   const BookingPage = () => {
     return  (
       <>
       <Header></Header>
       <Nav></Nav>
       <ViewBooking></ViewBooking>
-      <BookingMain handleChange={handleChange} handleSubmit={handleSubmit} form={form} availableTimes={availableTimes}></BookingMain>
+      <BookingMain handleChange={handleChange} handleSubmit={HandleSubmit} form={form} availableTimes={availableTimes}></BookingMain>
       <Footer></Footer>
       </>
     )
@@ -75,6 +91,7 @@ function App() {
       <Routes>
         <Route path="/" element={<HomePage/>}></Route>
         <Route path="/booking"element={<BookingPage/>}></Route>
+        <Route path="/booking_confirm"element={<BookingConfirmationPage/>}></Route>
       </Routes>
     </>
   );

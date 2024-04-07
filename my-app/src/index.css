@@ -336,3 +336,7 @@ input, select {
 .booking {
   flex-wrap: wrap;
 }
+
+.confirm {
+  color:#333333;
+}
