@@ -15,7 +15,10 @@ import { useNavigate } from "react-router-dom";
 
 function App() {
   const [availableTimes, setAvailableTimes] = useReducer(updateTimes, [], initializeTimes);
+  const [form, setForm] = useState({}
+    );
   const navigate = useNavigate();
+  const [errors, setErrors] = useState({});
 
   function updateTimes(state, action)
   {
@@ -26,25 +29,55 @@ function App() {
       return fakeAPI.fetchAPI((new Date()))
   }
 
-  const [form, setForm] = useState({
-    date: '',
-    time: '', 
-    numGuests: '',
-    reason: '',
-  });
+  const handleValidation = () => {
+    const formFields = {...form};
+    const formErrors = {};
+    let formIsValid = true;
+
+    if(!formFields["date"] ){
+      formIsValid = false;
+      formErrors["date"] = "Please enter a date";
+    }
+
+    if(!formFields["time"] ){
+      formIsValid = false;
+      formErrors["time"] = "Please enter a time";
+    }
+
+    if(!formFields["numGuests"] || formFields["numGuests"] <= 0 ){
+      formIsValid = false;
+      formErrors["numGuests"] = "Cannot be empty or less than or equal to 0";
+    }
+
+    if(!formFields["reason"] ){
+      formIsValid = false;
+      formErrors["reason"] = "Please enter an occaision";
+    }
+
+
+
+    setErrors(formErrors)
+    return formIsValid;
+  }
 
 
     const handleChange = function(event) {    
       const target = event.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const value = target.value;
       const name = target.name;
+      console.log(name, value); 
       setForm({
-      [name]: value    });
-    }
+        ...form,
+      [name]: value   
+     });
+        }
 
 
     const HandleSubmit = function(event) {
       event.preventDefault();
+      if(!handleValidation()){
+        return; 
+      }
       const result = fakeAPI.submitAPI(new FormData(document.querySelector('form')));
       if(result){
         return navigate("/booking_confirm")    
@@ -80,10 +113,10 @@ function App() {
       <Header></Header>
       <Nav></Nav>
       <ViewBooking></ViewBooking>
-      <BookingMain handleChange={handleChange} handleSubmit={HandleSubmit} form={form} availableTimes={availableTimes}></BookingMain>
+      <BookingMain handleChange={handleChange} handleSubmit={HandleSubmit} form={form} availableTimes={availableTimes} errors={errors}></BookingMain>
       <Footer></Footer>
       </>
-    )
+    ) 
   };
   
   return (

@@ -8,7 +8,7 @@ class BookingMain extends React.Component {
 
     render() {
         return (
-            <>
+            <> 
          <div class="top flex-container">
             <div class="col">
                 <h2>Little Lemon</h2>
@@ -27,25 +27,37 @@ class BookingMain extends React.Component {
             <div class="onecol"><h2>Make a Reservation</h2></div>
                 <div class="col">
             <form onSubmit={this.props.handleSubmit}>
-   <label for="res-date">Choose date</label>
-   <input type="date" id="res-date" value={this.props.form.date} onChange={this.props.handleInputChange}></input>
-   <label for="res-time">Choose time</label>
-   <select name="time" id="res-time " value={this.props.form.time} onChange={this.props.handleChange} data-testid="availableTimes">
-    <option></option>
-   {this.props.availableTimes.map((availableTime, index) => (
-          <option value={index}>{availableTime}</option>
-        ))}
-   </select>
-   <label for="guests">Number of guests</label>
-   <input type="number" name="numGuests" value={this.props.form.numGuests} onChange={this.props.handleInputChange} placeholder="1" min="1" max="10" id="guests"></input>
-   <label for="occasion">Occasion</label>
-   <select name="reason" id="occasion" value={this.props.form.reason} onChange={this.props.handleInputChange}>
-      <option>Birthday</option>
-      <option>Anniversary</option>
-   </select>
-   <input type="submit" value="Make Your reservation"></input>
-</form>
-</div>
+              <label for="res-date">Choose date</label>
+              <input type="date" name="date" id="res-date" value={this.props.form.date} onChange={this.props.handleChange}></input>
+              <span class="error">{this.props.errors["date"]}</span>
+
+
+              <label for="res-time">Choose time</label>
+              <select name="time" id="res-time " value={this.props.form.time} onChange={this.props.handleChange} data-testid="availableTimes">
+                <option></option>
+              {this.props.availableTimes.map((availableTime, index) => (
+                      <option value={index}>{availableTime}</option>
+                    ))}
+              </select>
+              <span class="error">{this.props.errors["time"]}</span>
+
+
+              <label for="guests">Number of guests</label>
+              <input type="number" name="numGuests" value={this.props.form.numGuests} onChange={this.props.handleChange} placeholder="1" min="1" max="10" id="guests"></input>
+              <span class="error">{this.props.errors["numGuests"]}</span>
+
+              <label for="occasion">Occasion</label>
+              <select name="reason" id="occasion" value={this.props.form.reason} onChange={this.props.handleChange}>
+                <option>--- Choose Occasion ---</option>
+                  <option>Birthday</option>
+                  <option>Anniversary</option>
+              </select>
+              <span class="error">{this.props.errors["reason"]}</span>
+
+
+              <input type="submit" aria-label="Submit" value="Make Your reservation"></input>
+          </form>
+      </div>
 </div>
             </>
         );
